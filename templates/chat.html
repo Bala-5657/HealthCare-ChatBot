@@ -1,0 +1,544 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Healthcare Chatbot</title>
+    
+    <!-- jQuery (Only one version included) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    
+    <!-- Bootstrap CSS & JS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'js/tagcomplete.css' %}">
+    
+    <style>
+        body {
+            font-family: "Montserrat", sans-serif;
+            background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        nav {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 15px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-left {
+            color: white;
+            font-size: 18px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            padding: 8px 16px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px; /* Moves the entire container down */
+        }
+
+        header {
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffffff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        #chat-box {
+            background-image: url('https://preview.redd.it/o67iakxcon571.jpg?auto=webp&s=ff1eedad41db913d7701bd577b861b02ca5f613b');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            width: 480px;
+            max-height: 600px;
+            border-radius: 10px;
+            box-shadow: 5px 20px 50px #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+        }
+
+        #chat-log {
+            padding: 20px;
+            overflow-y: auto;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #chat-log p {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 15px;
+            max-width: 75%;
+        }
+
+        .user-message {
+            background-color: #dcf8c6;
+            align-self: flex-end;
+            text-align: left;
+        }
+
+        .bot-message {
+            background-color: #eee;
+            align-self: flex-start;
+            text-align: left;
+        }
+
+        .input-container {
+            display: flex;
+            border-top: 1px solid #ddd;
+            background-color: rgba(255, 255, 255, 0.9);
+            position: relative;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        #message {
+            border: none;
+            padding: 10px ;
+            padding-left: 40px;
+            width: 70%;
+            box-sizing: border-box;
+            padding-left: 40px; /* Space for microphone icon */
+            border-radius: 20px;
+            outline: none;
+        }
+
+        .mic-button {
+            position: absolute;
+            top: 50%;
+            left: 15px;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            color: #6d44b8;
+            font-size: 20px;
+            cursor: pointer;
+            outline: none;
+        }
+
+        #send {
+            width: 55px;
+            height: 50px;
+            background-color: #573b8a;
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 20px;
+            margin-left: 10px;
+            transition: background-color 0.3s;
+            border:2px solid;
+            {% comment %} border-color: #000; {% endcomment %}
+            padding: 2px;
+            cursor: pointer;
+            -webkit-transition-duration: 0.4s;
+            transition-duration: 0.4s;
+        }
+
+        #send:hover {
+            background-color: #6d44b8;
+            box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+        }
+
+        #send-symptoms {
+            width: 25%;
+            background-color: #573b8a;
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 20px;
+            margin-left: 10px;
+            transition: background-color 0.3s;
+            border:2px solid;
+            {% comment %} border-color: #000; {% endcomment %}
+        }
+
+        #send-symptoms:hover {
+            background-color: #6d44b8;
+        }
+        .predict-button{
+            width: 40%;
+            background-color: #C0F299;
+            border: none;
+            color: black;
+            font-size: 16px;
+            font-weight:500;
+            cursor: pointer;
+            border-radius: 20px;
+            margin-left: 70px;
+            transition: background-color 0.3s;
+            border:2px solid;
+            border-color: #000;
+            padding: 2px;
+            cursor: pointer;
+            -webkit-transition-duration: 0.4s; /* Safari */
+            transition-duration: 0.4s;
+            margin-top:10px;
+        }
+        .predict-button:hover {
+            background-color: #DCF8C6;
+            box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+        }
+        /* Scrollbar Styling */
+        #chat-log::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #chat-log::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        #chat-log::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        #chat-log::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* Tag Complete Styles */
+        .tag_complete_main {
+            position: relative;
+            width: 100%;
+        }
+
+        .tag_complete {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+
+        .tags_container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background-color: #e0e0e0;
+            border-radius: 3px;
+            padding: 5px 10px;
+            margin: 2px;
+            display: flex;
+            align-items: center;
+        }
+
+        .tag .close {
+            margin-left: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .autocomplete {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: #123456;
+            border: 1px solid #ccc;
+            border-top: none;
+            max-height: 150px;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .autocomplete li {
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+
+        .autocomplete li:hover {
+            background-color: #f0f0f0;
+        }
+
+        .hide {
+            display: none;
+        }
+
+        
+        footer {
+            font-family: "Montserrat", sans-serif;
+            position: absolute;
+            bottom: 0px;
+            width: 100%;
+            height:5%;
+            text-align: center;
+            color: #ffffff;
+            font-size: 18px;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 5px;
+            box-sizing: border-box;
+        }
+
+        
+            
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="navbar-left">Hi, {{ user.username }}</div>
+        <div>
+            <a href="/chat">New Chat</a>
+            <a href="/home">Home</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'logout' %}">Logout</a>
+            {% else %}
+                <a href="{% url 'login' %}">Login</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <div class="container">
+        {% comment %} <header>
+            Welcome to My Healthcare Chatbot
+        </header> {% endcomment %}
+
+        <div id="chat-box">
+            <div id="chat-log"></div>
+            <form id="chat_form" method="post" onsubmit="send_chat(event)">
+                {% csrf_token %}
+                <div class="input-container">
+                    <!-- Microphone button for speech input -->
+                    <button type="button" class="mic-button" id="mic-button" aria-label="Start voice input"><i class="fas fa-microphone"></i></button>
+                    <input type="text" id="message" name="message" placeholder="Type your message here..." autofocus>
+                    <button type="submit" id="send" aria-label="Send message"><i class="fas fa-paper-plane"></i></button>
+                    <div id="loading" style="display: none;">Loading...</div>
+                    <button type="button" id="send-symptoms" onclick="symptomsOnClick(event)" aria-label="Enter symptoms">Symptoms</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <footer>
+        <a>Need help? Contact us @ balacarl007@gmail.com</a>
+     </footer>
+
+    <!-- TagComplete Plugin JS -->
+    <script src="{% static 'js/tagcomplete.js' %}"></script>
+
+    <script>
+        // Function to handle sending chat messages
+        function send_chat(event) {
+            event.preventDefault();
+
+            var message = $("#message").val();
+            if (message.trim() !== "") {
+                $.ajax({
+                    url: "", // Specify your endpoint here
+                    type: "POST",
+                    data: {
+                        message: message,
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                    success: function(response) {
+                        $("#chat-log").append("<p class='user-message'><strong>You:</strong> " + escapeHtml(message) + "</p>");
+                        $("#chat-log").append("<p class='bot-message'><strong>Bot:</strong> " + escapeHtml(response.message) + "</p>");
+                        $("#message").val("");
+                        $("#chat-log").scrollTop($("#chat-log")[0].scrollHeight);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error:", error);
+                        $("#chat-log").append("<p class='bot-message'><strong>Bot:</strong> Sorry, something went wrong.</p>");
+                    }
+                });
+            }
+        }
+
+// Function to handle Symptoms button click
+function symptomsOnClick(event) {
+    event.preventDefault();
+    if (!document.getElementById('symptomsInput')) {
+        let message = `
+        <br>
+        <label for="symptomsInput">Enter your Symptoms</label>
+        <input type="text" id="symptomsInput" name="symptoms" class="tags_input" placeholder="Enter your symptoms..." autofocus>
+        <button type="button" id="submit-symptoms" onclick="submitSymptoms()" class="predict-button">Submit</button>
+        `;
+        $("#chat-log").append("<p class='user-message'><strong>You:</strong> " + message + "</p>");
+        initSymptoms(); // Initialize tag autocomplete after rendering the input field
+        $("#chat-log").scrollTop($("#chat-log")[0].scrollHeight);
+    }
+}
+
+            
+
+        // Initialize TagComplete for symptoms input
+        function initSymptoms() {
+            var data = [
+                'itching', 'skin_rash', 'nodal_skin_eruptions', 'continuous_sneezing', 'shivering', 'chills', 'joint_pain',
+                'stomach_pain', 'acidity', 'ulcers_on_tongue', 'muscle_wasting', 'vomiting', 'burning_micturition', 'spotting_urination',
+                'fatigue', 'weight_gain', 'anxiety', 'cold_hands_and_feets', 'mood_swings', 'weight_loss', 'restlessness', 'lethargy',
+                'patches_in_throat', 'irregular_sugar_level', 'cough', 'high_fever', 'sunken_eyes', 'breathlessness', 'sweating',
+                'dehydration', 'indigestion', 'headache', 'yellowish_skin', 'dark_urine', 'nausea', 'loss_of_appetite',
+                'pain_behind_the_eyes', 'back_pain', 'constipation', 'abdominal_pain', 'diarrhoea', 'mild_fever', 'yellow_urine',
+                'yellowing_of_eyes', 'acute_liver_failure', 'fluid_overload', 'swelling_of_stomach', 'swelled_lymph_nodes', 'malaise',
+                'blurred_and_distorted_vision', 'phlegm', 'throat_irritation', 'redness_of_eyes', 'sinus_pressure', 'runny_nose',
+                'congestion', 'chest_pain', 'weakness_in_limbs', 'fast_heart_rate', 'pain_during_bowel_movements', 'pain_in_anal_region',
+                'bloody_stool', 'irritation_in_anus', 'neck_pain', 'dizziness', 'cramps', 'bruising', 'obesity', 'swollen_legs',
+                'swollen_blood_vessels', 'puffy_face_and_eyes', 'enlarged_thyroid', 'brittle_nails', 'swollen_extremeties',
+                'excessive_hunger', 'extra_marital_contacts', 'drying_and_tingling_lips', 'slurred_speech', 'knee_pain', 'hip_joint_pain',
+                'muscle_weakness', 'stiff_neck', 'swelling_joints', 'movement_stiffness', 'spinning_movements', 'loss_of_balance',
+                'unsteadiness', 'weakness_of_one_body_side', 'loss_of_smell', 'bladder_discomfort', 'foul_smell_of_urine',
+                'continuous_feel_of_urine', 'passage_of_gases', 'internal_itching', 'toxic_look_(typhos)', 'depression', 'irritability',
+                'muscle_pain', 'altered_sensorium', 'red_spots_over_body', 'belly_pain', 'abnormal_menstruation', 'dischromic_patches',
+                'watering_from_eyes', 'increased_appetite', 'polyuria', 'family_history', 'mucoid_sputum', 'rusty_sputum',
+                'lack_of_concentration', 'visual_disturbances', 'receiving_blood_transfusion', 'receiving_unsterile_injections', 'coma',
+                'stomach_bleeding', 'distention_of_abdomen', 'history_of_alcohol_consumption', 'fluid_overload', 'blood_in_sputum',
+                'prominent_veins_on_calf', 'palpitations', 'painful_walking', 'pus_filled_pimples', 'blackheads', 'scurring',
+                'skin_peeling', 'silver_like_dusting', 'small_dents_in_nails', 'inflammatory_nails', 'blister', 'red_sore_around_nose',
+                'yellow_crust_ooze'
+                
+            ];
+            $(".tags_input").tagComplete({
+                hide: false,
+                autocomplete: {
+                  data: data
+                },
+                onAdd: function(tag) {
+                    let existingTags = $(".tag_complete .tag").map(function() {
+                        return $(this).text().trim();
+                      }).get();
+                      console.log("existing Tags", existingTags);
+                      let tagId = tag['tagId'];
+                      console.log("tag id", tagId);
+                      console.log("tag in array existing tags", $.inArray(tagId, existingTags));
+                      if (existingTags.length > 0 && $.inArray(tagId, existingTags) !== -1) {
+                            return false;
+                        }
+                        data.pop(tagId);
+                        return true; // Allow adding the tags
+                },
+              });
+        }
+        // Function to handle symptoms submission
+        function sendWelcomeMessage() {
+            $("#chat-log").append("<p class='bot-message'><strong>Bot:</strong> Welcome {{ user.username }}! How can I assist you today?</p>");
+            $("#chat-log").scrollTop($("#chat-log")[0].scrollHeight);
+        }
+    
+        // Call the function to send a welcome message when the page loads
+        $(document).ready(function() {
+            sendWelcomeMessage();
+        });
+
+        function submitSymptoms() {
+            let symptomsInputs = document.getElementById('symptomsInput').value;
+            if (symptomsInputs.trim() === "") {
+                alert("Please enter at least one symptom.");
+                return;
+            }
+
+            fetch('/predict/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ symptoms: symptomsInputs })
+            })
+            .then(response => response.json())
+            .then(data => {
+                $("#chat-log").append("<p class='bot-message'><strong>Bot:</strong> Your Symtoms Leads to " + escapeHtml(data.disease) + "</p>");
+                $("#chat-log").scrollTop($("#chat-log")[0].scrollHeight);
+                $("#chat-log").append("<p class='bot-message'><strong>Bot:</strong> Let me give you a little description." + escapeHtml(data.description) + "</p>");
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                $("#chat-log").append("<p class='bot-message'><strong>Bot:</strong> Sorry, there was an error processing your symptoms.</p>");
+            });
+        }
+        // Escape HTML to prevent XSS
+        function escapeHtml(text) {
+            var map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+        }
+
+        // Speech-to-text logic for the microphone button
+        const micButton = document.getElementById('mic-button');
+        const chatInput = document.getElementById('message');
+        const sendButton = document.getElementById('send-button');
+
+        if (window.SpeechRecognition || window.webkitSpeechRecognition) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const recognition = new SpeechRecognition();
+
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = 'en-US';
+
+            micButton.addEventListener('click', () => {
+                recognition.start();
+                console.log("Voice recognition started");
+            });
+
+            recognition.onresult = (event) => {
+                const speechResult = event.results[0][0].transcript;
+                chatInput.value = speechResult;
+                console.log("Recognized text: ", speechResult);
+                send_chat(new Event('click'));
+            };
+
+            recognition.onerror = (event) => {
+                console.error("Speech recognition error: ", event.error);
+            };
+        } else {
+            alert("Sorry, your browser does not support Speech Recognition.");
+        }
+    </script>
+</body>
+</html>
