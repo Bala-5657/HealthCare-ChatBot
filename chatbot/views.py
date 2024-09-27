@@ -117,30 +117,91 @@ def get_response(user_input):
 
     # Responses for common questions, greetings, and health-related topics
     responses = {
-        "hi": "Hello! How are you feeling today?",
-        "hello": "Hi there! What can I help you with?",
-        "thanks": "Glad I could help! Let me know if you need more assistance.",
-        "bye": "Take care! If you need me again, I'll be here.",
-        "help": "I'm here to assist you. You can ask about symptoms, diseases, or even doctor recommendations.",
-        "doctor": "Here are a few doctors I recommend:"
-                  "1. Dr. Rahul Sharma - Cardiologist, available at HealthCare Hospital. Contact: +1234567890\n"
-                  "2. Dr. Aisha Verma - Dermatologist, SkinCare Clinic. Contact: +0987654321\n"
-                  "3. Dr. Vikram Singh - Orthopedic Surgeon, Bone Health Center. Contact: +1122334455\n"
-                  "4. Dr. Neha Kapoor - General Physician, Wellness Clinic. Contact: +2233445566",
-        "how are you": "I'm just a bot, but I'm always here to help! How about you? How are you feeling?",  
-        "what is your name": "I'm your healthcare assistant, always ready to help you with medical advice!",
-        "what can you do": "I can help you with information about symptoms, diseases, and even suggest doctors. You can also ask me about common health tips.",
-        "common cold treatment": "For common cold, rest and hydration are key. Over-the-counter medicines like paracetamol can help with symptoms. If symptoms persist, consult a doctor.",
-        "headache": "Headaches can have many causes. If it’s mild, rest and hydration may help. If it's persistent or severe, consult a healthcare provider.",
-        "fever": "For fever, make sure to rest and stay hydrated. You can take medicines like paracetamol to reduce fever. If it’s above 102°F or lasts more than 2 days, contact a doctor.",
-        "covid symptoms": "Common COVID-19 symptoms include fever, cough, fatigue, and loss of taste or smell. If you suspect COVID-19, it’s best to get tested and isolate to prevent spreading the virus.",
-        "healthy diet": "A balanced diet includes fruits, vegetables, lean proteins, whole grains, and plenty of water. Avoid excessive processed foods, sugar, and salt for better health.",
-        "exercise": "Regular exercise like walking, running, or yoga helps maintain fitness and mental well-being. Aim for at least 30 minutes of moderate activity most days of the week.",
-        "water intake": "Staying hydrated is important! It's recommended to drink about 8 glasses (2 liters) of water per day, but it can vary depending on your activity level and environment.",
-        "stress relief": "To relieve stress, you can try deep breathing exercises, meditation, yoga, or even taking short walks. Regular physical activity and proper sleep are also key!",
-        "insomnia": "For better sleep, maintain a consistent sleep schedule, limit screen time before bed, and try relaxation techniques. If insomnia persists, you may want to consult a doctor.",
-        "diabetes prevention": "To reduce the risk of diabetes, maintain a healthy weight, stay active, eat a balanced diet, and limit sugar intake. Regular health check-ups are also important.",
-        "heart disease prevention": "A healthy lifestyle helps prevent heart disease. Eat a balanced diet, exercise regularly, quit smoking, manage stress, and get regular check-ups."
+    "hi": "Hello! How are you feeling today?",
+    "hello": "Hi there! What can I help you with?",
+    "thanks": "Glad I could help! Let me know if you need more assistance.",
+    "bye": "Take care! If you need me again, I'll be here.",
+    "help": "I'm here to assist you. You can ask about symptoms, diseases, or even doctor recommendations.",
+    "doctor": "Here are a few doctors I recommend:"
+              "1. Dr. Rahul Sharma - Cardiologist, available at HealthCare Hospital. Contact: +1234567890\n"
+              "2. Dr. Aisha Verma - Dermatologist, SkinCare Clinic. Contact: +0987654321\n"
+              "3. Dr. Vikram Singh - Orthopedic Surgeon, Bone Health Center. Contact: +1122334455\n"
+              "4. Dr. Neha Kapoor - General Physician, Wellness Clinic. Contact: +2233445566",
+    "how are you": "I'm just a bot, but I'm always here to help! How about you? How are you feeling?",
+    "what is your name": "I'm your healthcare assistant, always ready to help you with medical advice!",
+    "what can you do": "I can help you with information about symptoms, diseases, and even suggest doctors. You can also ask me about common health tips.",
+    
+    "common cold": "The common cold is a viral infection that affects the nose and throat, causing symptoms like a runny nose, cough, and sore throat.",
+    "remedy for common cold": "Rest, stay hydrated, and take over-the-counter cold medications. Symptoms typically resolve in a few days, but consult a doctor if they persist.",
+    
+    "fever": "Fever is an elevated body temperature, usually a sign of an underlying infection or illness.",
+    "remedy for fever": "Stay hydrated, rest, and take over-the-counter medications like paracetamol to lower the temperature. If the fever is above 102°F or lasts more than a couple of days, see a doctor.",
+
+    "headache": "Headaches can have many causes, ranging from dehydration to stress or more serious conditions.",
+    "remedy for headache": "Stay hydrated, rest in a quiet and dark room, and take over-the-counter pain relief if necessary. If the headache is persistent or severe, consult a doctor.",
+
+    "covid-19": "COVID-19 is a viral infection caused by the SARS-CoV-2 virus, with symptoms ranging from mild (cough, fever) to severe (difficulty breathing).",
+    "remedy for covid-19": "Isolate yourself, stay hydrated, and follow medical advice. Over-the-counter medications may alleviate symptoms, but severe cases require immediate medical care.",
+
+    "allergy": "Allergies occur when your immune system reacts to foreign substances like pollen, pet dander, or certain foods.",
+    "remedy for allergy": "Identify and avoid the allergen. Antihistamines can help alleviate symptoms. For severe reactions, seek medical attention immediately.",
+
+    "asthma": "Asthma is a chronic condition that causes the airways to narrow and swell, making breathing difficult.",
+    "remedy for asthma": "Use prescribed inhalers, avoid triggers such as dust and smoke, and follow your doctor’s asthma management plan.",
+
+    "diabetes": "Diabetes affects your body’s ability to regulate blood sugar, leading to high blood sugar levels.",
+    "remedy for diabetes": "Maintain a balanced diet, engage in regular physical activity, monitor blood glucose levels, and take prescribed medications. Regular check-ups with a doctor are crucial.",
+
+    "hypertension": "Hypertension, or high blood pressure, increases the risk of heart disease and stroke.",
+    "remedy for hypertension": "Adopt a heart-healthy diet low in salt, exercise regularly, manage stress, and take medications as prescribed.",
+
+    "migraine": "A migraine is a severe, recurring headache that is often accompanied by nausea, sensitivity to light, and throbbing pain.",
+    "remedy for migraine": "Rest in a dark, quiet room, apply cold compresses, and use over-the-counter or prescription medications. Preventive treatments may be necessary for frequent migraines.",
+
+    "bronchial asthma": "Bronchial asthma leads to episodes of wheezing, chest tightness, and shortness of breath due to inflamed airways.",
+    "remedy for bronchial asthma": "Keep a rescue inhaler on hand, avoid known triggers, and follow your asthma action plan. Long-term control medications may be needed if attacks are frequent.",
+
+    "pneumonia": "Pneumonia is an infection that inflames the air sacs in one or both lungs, which may fill with fluid or pus.",
+    "remedy for pneumonia": "Rest, take prescribed antibiotics or antiviral medications, stay hydrated, and seek immediate medical attention if symptoms become severe.",
+
+    "hepatitis": "Hepatitis refers to inflammation of the liver, often caused by viral infections or excessive alcohol consumption.",
+    "remedy for hepatitis": "Rest, follow your doctor's advice, and avoid alcohol and other substances that could harm the liver. Antiviral medications may be needed in some cases.",
+
+    "tuberculosis": "Tuberculosis (TB) is a contagious bacterial infection that primarily affects the lungs but can spread to other organs.",
+    "remedy for tuberculosis": "Complete the full course of antibiotics, typically lasting six to nine months. Regular follow-up with your healthcare provider is essential.",
+
+    "peptic ulcer": "Peptic ulcers are sores that develop on the inner lining of your stomach or the upper part of your small intestine, often due to H. pylori infection or prolonged use of NSAIDs.",
+    "remedy for peptic ulcer": "Avoid spicy foods, alcohol, and NSAIDs. Take prescribed medications such as proton pump inhibitors (PPIs) to reduce stomach acid and allow the ulcer to heal.",
+
+    "urinary tract infection": "UTIs are infections in any part of the urinary system, including the kidneys, bladder, and urethra, often caused by bacteria.",
+    "remedy for urinary tract infection": "Drink plenty of water, take prescribed antibiotics, and urinate frequently to flush out bacteria. Consult a doctor if symptoms persist or worsen.",
+
+    "arthritis": "Arthritis is inflammation of the joints, causing pain, stiffness, and reduced movement. There are many types, including osteoarthritis and rheumatoid arthritis.",
+    "remedy for arthritis": "Maintain regular physical activity, use pain relief or anti-inflammatory medications, and consider physical therapy for joint support. Severe cases may require stronger medications or surgery.",
+
+    "dengue": "Dengue fever is a viral infection spread by mosquitoes, causing high fever, rash, and muscle/joint pain. In severe cases, it can lead to hemorrhagic fever or shock.",
+    "remedy for dengue": "Rest, hydrate, and avoid nonsteroidal anti-inflammatory drugs (NSAIDs) like aspirin. Seek immediate medical care if symptoms become severe, such as bleeding or difficulty breathing.",
+
+    "gastroenteritis": "Gastroenteritis, often called the stomach flu, is inflammation of the stomach and intestines, leading to diarrhea, vomiting, and cramps.",
+    "remedy for gastroenteritis": "Rest, stay hydrated with water or oral rehydration solutions, and avoid solid food until symptoms improve. Consult a doctor if symptoms persist or worsen.",
+
+    "heart attack": "A heart attack occurs when blood flow to the heart is blocked, causing damage to heart muscle tissue.",
+    "remedy for heart attack": "Call emergency services immediately. Take aspirin if advised by a doctor, and stay calm. Treatment in a hospital will include restoring blood flow to the heart.",
+
+    "bronchitis": "Bronchitis is inflammation of the bronchial tubes, causing coughing, mucus production, and shortness of breath.",
+    "remedy for bronchitis": "Rest, increase fluid intake, and avoid irritants like smoke. Over-the-counter medications can help with symptoms, but consult a doctor if it becomes chronic.",
+
+    "chickenpox": "Chickenpox is a highly contagious viral infection causing an itchy rash and flu-like symptoms.",
+    "remedy for chickenpox": "Rest, apply calamine lotion to soothe itching, and avoid scratching. Antiviral medication may be needed in severe cases.",
+
+    "jaundice": "Jaundice is a condition where the skin and whites of the eyes turn yellow due to high bilirubin levels, often caused by liver issues.",
+    "remedy for jaundice": "Follow your doctor’s advice, which may include dietary changes, medications, or treatment for the underlying condition causing jaundice.",
+
+    "healthy diet": "A balanced diet includes fruits, vegetables, lean proteins, whole grains, and plenty of water. Avoid excessive processed foods, sugar, and salt for better health.",
+    "exercise": "Regular exercise like walking, running, or yoga helps maintain fitness and mental well-being. Aim for at least 30 minutes of moderate activity most days of the week.",
+    "water intake": "Staying hydrated is important! It's recommended to drink about 8 glasses (2 liters) of water per day, but it can vary depending on your activity level and environment.",
+    "stress relief": "To relieve stress, you can try deep breathing exercises, meditation, yoga, or even taking short walks. Regular physical activity and proper sleep are also key!",
+    "insomnia": "For better sleep, maintain a consistent sleep schedule, limit screen time before bed, and try relaxation techniques. If insomnia persists, consult a healthcare provider.",
     }
 
     # Catch-all response for unknown inputs
